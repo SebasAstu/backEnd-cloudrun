@@ -1,14 +1,15 @@
 steps:
   - name: gcr.io/k8s-skaffold/pack
     args:
+      -'--env=GOOGLE_BUILDABLE=src/Web'
+      -'--env=GOOGLE_ENTRYPOINT=cd bin && dotnet Web.dl'
       - build
       - >-
         $_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
       - '--builder=gcr.io/buildpacks/builder:v1'
       - '--network=cloudbuild'
       - '--path=.'
-      - "--env=GOOGLE_BUILDABLE=src/Web"
-      - "--env=GOOGLE_ENTRYPOINT=cd bin && dotnet Web.dll"
+     
     id: Buildpack
     entrypoint: pack
   - name: gcr.io/cloud-builders/docker
